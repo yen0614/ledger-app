@@ -719,26 +719,26 @@ body.detail-mode .transaction-list .day-summary {
   position: fixed;
   left: 0;
   right: 0;
-  bottom: 10px;
+  bottom: 0;
   display: flex;
   justify-content: space-around;
-  gap: 12px;
+  gap: 8px;
   max-width: 420px;
   margin: 0 auto;
-  padding: 10px 12px;
+  padding: 6px 10px calc(4px + env(safe-area-inset-bottom));
   z-index: 60;
 }
 .nav-item {
   background: #fff;
-  border-radius: 22px;
-  padding: 14px 12px;
+  border-radius: 18px;
+  padding: 8px 8px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 8px;
+  gap: 4px;
   border: 1px solid rgba(0,0,0,0.08);
   width: 30%;
-  min-width: 96px;
+  min-width: 0;
   box-shadow: 0 12px 24px rgba(0,0,0,0.08);
 }
 .nav-item.active {
@@ -748,10 +748,10 @@ body.detail-mode .transaction-list .day-summary {
   transform: none;
 }
 .nav-item .nav-icon {
-  font-size: 18px;
+  font-size: 16px;
 }
 .nav-item .nav-label {
-  font-size: 12px;
+  font-size: 11px;
   color: #2b2b2b;
   font-weight: 700;
 }
@@ -784,10 +784,20 @@ body.detail-mode .transaction-list .day-summary {
 }
 
 .stats-month-switch {
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 14px;
+}
+
+.stats-date-picker {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+  border: 0;
 }
 
 .stats-nav-btn {
@@ -1002,9 +1012,9 @@ body.detail-mode .transaction-list .day-summary {
 }
 
 body.show-stats .bottom-nav .nav-item.active {
-  background: #fff;
-  border: 2px solid #222;
-  box-shadow: none;
+  background: #fff7d8;
+  border: 1px solid rgba(244,196,91,0.4);
+  box-shadow: 0 14px 28px rgba(244,196,91,0.14);
 }
 
 body.show-stats .bottom-nav .nav-item.active .nav-icon {

@@ -13,7 +13,7 @@
   <link rel="manifest" href="manifest.webmanifest" />
   <link rel="apple-touch-icon" href="icon-180.svg" />
   <link rel="icon" href="icon-180.svg" type="image/svg+xml" />
-  <link rel="stylesheet" href="styles.css?v=4" />
+  <link rel="stylesheet" href="styles.css?v=8" />
   <link rel="stylesheet" href="category-modal.css" />
 </head>
 <body>
@@ -131,6 +131,7 @@
         <div class="stats-month-switch">
           <button id="statsPrevBtn" class="stats-nav-btn" type="button">‹</button>
           <button id="statsMonthLabel" class="stats-month-label" type="button">2026年 7月</button>
+          <input id="statsMonthInput" class="stats-date-picker" type="month" aria-label="選擇統計月份" />
           <button id="statsNextBtn" class="stats-nav-btn" type="button">›</button>
         </div>
         <div class="stats-period-toggle" role="tablist" aria-label="統計範圍">
@@ -205,7 +206,7 @@
       });
     }
   </script>
-  <script src="app.bundle.js?v=4"></script>
+  <script src="app.bundle.js?v=9"></script>
   <nav class="bottom-nav">
     <button class="nav-item">
       <div class="nav-icon">✏️</div>

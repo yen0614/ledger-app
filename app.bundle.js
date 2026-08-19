@@ -242,11 +242,20 @@ function setCurrentMonth(date) {
 
 function openNativeDatePicker(input) {
   if (!input) return;
-  if (typeof input.showPicker === 'function') {
-    input.showPicker();
-    return;
-  }
+  try {
+    if (typeof input.showPicker === 'function') {
+      input.showPicker();
+      return;
+    }
+  } catch (error) {}
+  input.focus({ preventScroll: true });
   input.click();
+}
+
+function openStatsMonthPicker() {
+  if (!statsMonthInput) return;
+  statsMonthInput.value = formatMonthInputValue(currentMonth);
+  openNativeDatePicker(statsMonthInput);
 }
 
 function currentDateToISO() {
@@ -489,7 +498,7 @@ function buildRingBackground(rows, total, baseColor) {
   if (!total) return `conic-gradient(${baseColor} 0 100%)`;
   let cursor = 0;
   const parts = [];
-  const palette = ['#d6ab2c', '#e3ba50', '#c9921e', '#efc85f', '#b88412', '#f2ce74'];
+  const palette = ['#d6ab2c', '#2f9f8a', '#ea6f5d', '#5b8fd8', '#b66ad1', '#e38b3c'];
   rows.forEach((row, index) => {
     const next = cursor + (row.amount / total) * 100;
     parts.push(`${palette[index % palette.length]} ${cursor}% ${next}%`);
@@ -514,6 +523,7 @@ function renderStatsView() {
   const categoryData = getStatsCategoryRows(summary.filtered, statsCategoryType);
   const isExpenseCategory = statsCategoryType === 'expense';
   const categoryTitle = isExpenseCategory ? '總支出' : '總收入';
+  const categoryColors = ['#d6ab2c', '#2f9f8a', '#ea6f5d', '#5b8fd8', '#b66ad1', '#e38b3c'];
 
   if (statsMonthLabel) statsMonthLabel.textContent = getStatsPeriodRangeLabel();
   if (statsBalanceText) statsBalanceText.textContent = formatStatsCurrency(summary.income - summary.expense);
@@ -526,11 +536,11 @@ function renderStatsView() {
   if (statsCategoryDonut) statsCategoryDonut.style.background = buildRingBackground(categoryData.rows, categoryData.total, '#d4a723');
 
   if (statsCategoryList) {
-    statsCategoryList.innerHTML = categoryData.rows.length ? categoryData.rows.map(row => {
+    statsCategoryList.innerHTML = categoryData.rows.length ? categoryData.rows.map((row, index) => {
       const percent = categoryData.total ? ((row.amount / categoryData.total) * 100).toFixed(1) : '0.0';
       return `
         <div class="stats-category-row">
-          <span class="stats-category-dot"></span>
+          <span class="stats-category-dot" style="background: ${categoryColors[index % categoryColors.length]};"></span>
           <span class="stats-category-name">${row.icon} ${row.label}</span>
           <span class="stats-category-percent">${percent}%</span>
         </div>
@@ -717,6 +727,7 @@ const statsScreen = document.getElementById('statsScreen');
 const statsPrevBtn = document.getElementById('statsPrevBtn');
 const statsNextBtn = document.getElementById('statsNextBtn');
 const statsMonthLabel = document.getElementById('statsMonthLabel');
+const statsMonthInput = document.getElementById('statsMonthInput');
 const statsSummaryDonut = document.getElementById('statsSummaryDonut');
 const statsBalanceText = document.getElementById('statsBalanceText');
 const statsExpenseLegend = document.getElementById('statsExpenseLegend');
@@ -898,6 +909,11 @@ function renderCategories(onAddCategory, onDeleteCategory) {
       document.body.classList.remove('awaiting-category');
       noteInput.value = category.label;
       renderCategories(onAddCategory, onDeleteCategory);
+      if (calculatorGridEl) {
+        requestAnimationFrame(() => {
+          calculatorGridEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        });
+      }
     });
     if (!isAddButton && !isDefault) {
       const deleteButton = button.querySelector('.category-delete');
@@ -1183,8 +1199,17 @@ window.addEventListener('load', async () => {
   if (statsPrevBtn) statsPrevBtn.addEventListener('click', () => shiftStatsPeriod(-1));
   if (statsNextBtn) statsNextBtn.addEventListener('click', () => shiftStatsPeriod(1));
   if (statsMonthLabel) {
-    statsMonthLabel.addEventListener('click', () => {
-      setStatsPeriod(statsPeriod === 'month' ? 'year' : 'month');
+    statsMonthLabel.addEventListener('click', openStatsMonthPicker);
+  }
+  if (statsMonthInput) {
+    statsMonthInput.addEventListener('change', () => {
+      if (!statsMonthInput.value) return;
+      const [year, month] = statsMonthInput.value.split('-').map(Number);
+      const picked = new Date(year, month - 1, 1, 12);
+      if (Number.isNaN(picked.getTime())) return;
+      currentMonth = picked;
+      statsPeriod = 'month';
+      renderStatsView();
     });
   }
 
