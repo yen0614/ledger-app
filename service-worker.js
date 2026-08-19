@@ -1,10 +1,10 @@
-const CACHE_NAME = 'ledger-app-v8';
+const CACHE_NAME = 'ledger-app-v11';
 const ASSETS = [
   './',
   './index.html',
-  './styles.css?v=8',
+  './styles.css?v=11',
   './category-modal.css',
-  './app.bundle.js?v=9',
+  './app.bundle.js?v=10',
   './manifest.webmanifest',
   './icon-180.svg'
 ];

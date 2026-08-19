@@ -130,6 +130,11 @@ body.show-stats .stats-screen {
   color: #2b2b2b;
 }
 
+.summary-value.balance.negative,
+.stats-donut-amount.negative {
+  color: #f76161;
+}
+
 .expense {
   color: #f76161;
 }
@@ -238,11 +243,48 @@ body.detail-mode .summary-value.income {
   cursor: pointer;
 }
 .date-text {
+  position: relative;
   padding: 8px 16px;
   background: rgba(255,255,255,0.98);
   border-radius: 18px;
   box-shadow: 0 12px 28px rgba(0,0,0,0.06);
   font-weight: 700;
+}
+
+.date-text #recordDateInput {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 190px;
+  height: 44px;
+  transform: translate(-50%, -50%);
+  opacity: 0.01;
+  pointer-events: auto;
+  z-index: 3;
+  border: 0;
+  cursor: pointer;
+}
+
+body.detail-mode .date-text #recordMonthInput {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 190px;
+  height: 44px;
+  transform: translate(-50%, -50%);
+  opacity: 0.01;
+  pointer-events: auto;
+  z-index: 3;
+  border: 0;
+  cursor: pointer;
+}
+
+body.detail-mode .date-text #recordDateInput {
+  pointer-events: none;
+}
+
+body:not(.detail-mode) .date-text #recordMonthInput {
+  pointer-events: none;
 }
 
 .transactions-section {
@@ -340,6 +382,10 @@ body.detail-mode .transaction-list .day-summary {
 
 .transaction-list .day-summary .day-total {
   color: #2d9d74;
+}
+
+.transaction-list .day-summary .day-total.negative {
+  color: #f76161;
 }
 
 .transaction-list .list-item {

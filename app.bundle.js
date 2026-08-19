@@ -340,7 +340,11 @@ function renderTransactionList(transactions) {
     const daySummaryLabel = document.querySelector('.transactions-section > .day-summary span:first-child');
     const daySummaryTotal = document.querySelector('.transactions-section > .day-summary .day-total');
     if (daySummaryLabel) daySummaryLabel.textContent = '當日紀錄';
-    if (daySummaryTotal) daySummaryTotal.textContent = `${dayTotal >= 0 ? '+ NT$' : '- NT$'}${Math.abs(dayTotal).toLocaleString()}`;
+    if (daySummaryTotal) {
+      daySummaryTotal.textContent = `${dayTotal >= 0 ? '+ NT$' : '- NT$'}${Math.abs(dayTotal).toLocaleString()}`;
+      daySummaryTotal.classList.toggle('negative', dayTotal < 0);
+      daySummaryTotal.classList.toggle('positive', dayTotal >= 0);
+    }
   }
   if (isDetailMode()) {
     const groupedByDay = filteredTransactions.reduce((groups, entry) => {
@@ -364,7 +368,7 @@ function renderTransactionList(transactions) {
         <div class="detail-day-group">
           <div class="day-summary day-summary--detail">
             <span>${dayLabel}</span>
-            <span class="day-total">${dayTotal >= 0 ? '+ NT$' : '- NT$'}${Math.abs(dayTotal).toLocaleString()}</span>
+            <span class="day-total ${dayTotal < 0 ? 'negative' : 'positive'}">${dayTotal >= 0 ? '+ NT$' : '- NT$'}${Math.abs(dayTotal).toLocaleString()}</span>
           </div>
           <div class="detail-day-box">
       `;
@@ -428,7 +432,11 @@ function renderSummary(summary) {
   }
   const balance = summary.income - summary.expense;
   const balanceEl = document.querySelector('.summary-value.balance');
-  if (balanceEl) balanceEl.textContent = `NT$${balance.toLocaleString()}`;
+  if (balanceEl) {
+    balanceEl.textContent = `NT$${balance.toLocaleString()}`;
+    balanceEl.classList.toggle('negative', balance < 0);
+    balanceEl.classList.toggle('positive', balance >= 0);
+  }
   if (donutCenter) donutCenter.textContent = `NT$${balance.toLocaleString()}`;
 }
 
@@ -526,7 +534,12 @@ function renderStatsView() {
   const categoryColors = ['#d6ab2c', '#2f9f8a', '#ea6f5d', '#5b8fd8', '#b66ad1', '#e38b3c'];
 
   if (statsMonthLabel) statsMonthLabel.textContent = getStatsPeriodRangeLabel();
-  if (statsBalanceText) statsBalanceText.textContent = formatStatsCurrency(summary.income - summary.expense);
+  if (statsBalanceText) {
+    const statsBalance = summary.income - summary.expense;
+    statsBalanceText.textContent = formatStatsCurrency(statsBalance);
+    statsBalanceText.classList.toggle('negative', statsBalance < 0);
+    statsBalanceText.classList.toggle('positive', statsBalance >= 0);
+  }
   if (statsExpenseLegend) statsExpenseLegend.textContent = `支出 ${formatStatsCurrency(summary.expense)}`;
   if (statsIncomeLegend) statsIncomeLegend.textContent = `收入 ${formatStatsCurrency(summary.income)}`;
   if (statsSummaryDonut) statsSummaryDonut.style.background = buildSummaryRingBackground(summary);
