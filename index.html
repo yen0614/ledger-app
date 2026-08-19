@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>記帳 APP</title>
+  <meta name="theme-color" content="#fbf8f2" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-title" content="記帳 APP" />
+  <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="apple-touch-icon" href="icon-180.svg" />
+  <link rel="icon" href="icon-180.svg" type="image/svg+xml" />
+  <link rel="stylesheet" href="styles.css?v=4" />
+  <link rel="stylesheet" href="category-modal.css" />
+</head>
+<body>
+  <div id="loader" class="loader-screen">
+    <div class="loader-box">
+      <div class="spinner"></div>
+      <p>正在載入...</p>
+    </div>
+  </div>
+
+  <div class="app-shell">
+    <header class="top-bar">
+      <button id="menuBtn" class="icon-btn">☰</button>
+      <div class="page-title">記帳手機板</div>
+      <button id="infoBtn" class="icon-btn">ℹ️</button>
+    </header>
+
+    <section class="balance-card">
+      <div class="date-selector-inline">
+        <div class="date-text">
+          <button id="datePrev" class="date-nav">‹</button>
+          <div id="dateLabel" class="date-label">2026年7月</div>
+          <button id="dateNext" class="date-nav">›</button>
+        </div>
+      </div>
+      <div class="summary-grid">
+        <div class="summary-card">
+          <div class="summary-label">月支出</div>
+          <div class="summary-value expense">$0</div>
+        </div>
+        <div class="summary-card">
+          <div class="summary-label">月收入</div>
+          <div class="summary-value income">$0</div>
+        </div>
+        <div class="summary-card">
+          <div class="summary-label">結餘</div>
+          <div class="summary-value balance">$0</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="nav-tabs hidden" id="entryTabs">
+      <button class="tab-button active" data-tab="expense">支出</button>
+      <button class="tab-button" data-tab="income">收入</button>
+    </section>
+
+    
+
+    <section class="entry-panel hidden" id="entryPanel">
+      <div class="category-grid" id="categoryGrid"></div>
+      <div class="note-input">
+        <input id="noteInput" type="text" placeholder="在此輸入備註" />
+        <input id="amountInput" class="amount-display" type="text" value="NT$0" />
+      </div>
+      <button id="deleteTransactionBtn" class="delete-btn hidden" type="button">刪除交易</button>
+      <div class="calculator-grid">
+        <button class="calc-btn" data-value="7">7</button>
+        <button class="calc-btn" data-value="8">8</button>
+        <button class="calc-btn" data-value="9">9</button>
+        <button class="calc-btn op" data-value="AC">AC</button>
+        <button class="calc-btn" data-value="4">4</button>
+        <button class="calc-btn" data-value="5">5</button>
+        <button class="calc-btn" data-value="6">6</button>
+        <button class="calc-btn op" data-value="÷">÷</button>
+        <button class="calc-btn" data-value="1">1</button>
+        <button class="calc-btn" data-value="2">2</button>
+        <button class="calc-btn" data-value="3">3</button>
+        <button class="calc-btn op" data-value="×">×</button>
+        <button class="calc-btn" data-value="00">00</button>
+        <button class="calc-btn" data-value="0">0</button>
+        <button class="calc-btn" data-value=".">.</button>
+        <button class="calc-btn op" data-value="-">-</button>
+        <button class="calc-btn wide op" data-value="+">+</button>
+        <button class="calc-btn confirm" data-value="OK">OK</button>
+      </div>
+    </section>
+
+    <section class="transactions-section">
+      <div class="day-summary">
+        <span>當日紀錄</span>
+      </div>
+      <div class="transaction-list">
+        <div class="list-item">
+          <div class="list-left">
+            <div class="list-icon">💰</div>
+            <div>
+              <p class="list-note">薪資</p>
+            </div>
+          </div>
+          <p class="list-amount positive">+ NT$7,800</p>
+        </div>
+        <div class="list-item">
+          <div class="list-left">
+            <div class="list-icon">🌙</div>
+            <div>
+              <p class="list-note">消夜</p>
+            </div>
+          </div>
+          <p class="list-amount negative">- NT$89</p>
+        </div>
+        <div class="list-item">
+          <div class="list-left">
+            <div class="list-icon">🌙</div>
+            <div>
+              <p class="list-note">消夜</p>
+            </div>
+          </div>
+          <p class="list-amount negative">- NT$89</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="stats-screen hidden" id="statsScreen" aria-label="統計頁面">
+      <div class="stats-header">
+        <div class="stats-month-switch">
+          <button id="statsPrevBtn" class="stats-nav-btn" type="button">‹</button>
+          <button id="statsMonthLabel" class="stats-month-label" type="button">2026年 7月</button>
+          <button id="statsNextBtn" class="stats-nav-btn" type="button">›</button>
+        </div>
+        <div class="stats-period-toggle" role="tablist" aria-label="統計範圍">
+          <button class="stats-period-btn active" type="button" data-period="month">月</button>
+          <button class="stats-period-btn" type="button" data-period="year">年</button>
+        </div>
+      </div>
+
+      <div class="stats-summary-card">
+        <div class="stats-donut-wrap">
+          <div class="stats-donut stats-summary-donut" id="statsSummaryDonut">
+            <div class="stats-donut-center">
+              <div class="stats-donut-label">結餘</div>
+              <div class="stats-donut-amount" id="statsBalanceText">$0</div>
+            </div>
+          </div>
+        </div>
+        <div class="stats-legend">
+          <div class="stats-legend-item expense">
+            <span class="stats-legend-dot"></span>
+            <span id="statsExpenseLegend">支出 $0</span>
+          </div>
+          <div class="stats-legend-item income">
+            <span class="stats-legend-dot"></span>
+            <span id="statsIncomeLegend">收入 $0</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="stats-category-toggle" role="tablist" aria-label="分類切換">
+        <button class="stats-category-btn active" type="button" data-category-type="expense">支出分類</button>
+        <button class="stats-category-btn" type="button" data-category-type="income">收入分類</button>
+      </div>
+
+      <div class="stats-category-card">
+        <div class="stats-donut-wrap stats-category-donut-wrap">
+          <div class="stats-donut stats-category-donut" id="statsCategoryDonut">
+            <div class="stats-donut-center">
+              <div class="stats-donut-label" id="statsCategoryCenterLabel">總支出</div>
+              <div class="stats-donut-amount" id="statsCategoryCenterAmount">$0</div>
+            </div>
+          </div>
+        </div>
+        <div class="stats-category-detail-title">分類明細</div>
+        <div class="stats-category-list" id="statsCategoryList"></div>
+      </div>
+    </section>
+  </div>
+
+  <div class="category-modal-backdrop" id="categoryModal">
+    <div class="category-modal">
+      <h2>新增分類</h2>
+      <label>
+        分類名稱
+        <input id="categoryNameInput" type="text" placeholder="例如 早餐、電影" />
+      </label>
+      <div class="icon-preview">
+        <span id="categoryIconPreview">⭐</span>
+        <span>系統會自動推薦圖示</span>
+      </div>
+      <div class="category-modal-footer">
+        <button type="button" class="cancel-btn" id="categoryCancelBtn">取消</button>
+        <button type="button" class="confirm-btn" id="categoryConfirmBtn">新增</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('service-worker.js').catch(() => {});
+      });
+    }
+  </script>
+  <script src="app.bundle.js?v=4"></script>
+  <nav class="bottom-nav">
+    <button class="nav-item">
+      <div class="nav-icon">✏️</div>
+      <div class="nav-label">記帳</div>
+    </button>
+    <button class="nav-item active">
+      <div class="nav-icon">📋</div>
+      <div class="nav-label">明細</div>
+    </button>
+    <button class="nav-item">
+      <div class="nav-icon">📊</div>
+      <div class="nav-label">統計</div>
+    </button>
+  </nav>
+</body>
+</html>

@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="180" height="180" viewBox="0 0 180 180" role="img" aria-label="記帳 APP">
+  <rect width="180" height="180" rx="40" fill="#fbf8f2"/>
+  <rect x="28" y="28" width="124" height="124" rx="30" fill="#2f9f8a"/>
+  <rect x="42" y="54" width="18" height="70" rx="6" fill="#ffffff"/>
+  <rect x="72" y="76" width="18" height="48" rx="6" fill="#f4c45b"/>
+  <rect x="102" y="40" width="18" height="84" rx="6" fill="#ea6f5d"/>
+  <rect x="132" y="88" width="18" height="36" rx="6" fill="#ffffff"/>
+</svg>
